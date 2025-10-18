@@ -1,0 +1,17 @@
+---
+- name: creating files or directory
+  hosts: all
+  become: true
+  gather_facts: no
+
+  tasks:
+    - name: create a file
+      file:
+        path: /opt/dir1
+        state: absent
+       
+        
+    
+      
+      
+      

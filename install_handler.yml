@@ -1,0 +1,30 @@
+---
+- name: intsalling packages
+  hosts: all
+  become: true
+  gather_facts: yes
+
+  tasks:
+  - name: installing packages
+    ansible.builtin.yum:
+      name: httpd
+      state: latest
+    notify: start httpd services
+
+  - name: Copy file to remote machine
+    ansible.builtin.copy:
+      src: /home/ansadmin/playboks/index.html
+      dest: /home/ansadmin/var/www/html/
+
+  handlers:
+  - name: start httpd services
+    ansible.builtin.service:
+      name: httpd
+      state: started
+     
+    
+  
+   
+    
+     
+

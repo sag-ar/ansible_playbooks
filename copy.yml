@@ -1,0 +1,11 @@
+---
+- name: copying files
+  hosts: all
+  become: true
+  gather_facts: no
+  tasks:
+    - name: Copy file to remote machine
+      ansible.builtin.copy:
+        src: /home/ansadmin/playboks/index.html
+        dest: /home/ansadmin/var/www/html/
+        

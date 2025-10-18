@@ -1,0 +1,17 @@
+---
+- name: intsalling packages
+  hosts: all
+  become: true
+  gather_facts: yes
+  tasks:
+  - name: intsall package
+    ansible.builtin.yum:
+      name: git
+      state: installed
+    when: ansible_os_family == "RedHat"
+
+  - name: intsall ubuntu
+    ansible.builtin.apt:
+      name: git
+      state: present
+    when: ansible_os_family == "Debian"
