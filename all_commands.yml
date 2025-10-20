@@ -115,4 +115,4 @@
       state: started
 
       
-  
+ #ansible-playbook create_user_external_file.yml --extra-vars "user_name=priyanka" --check 

@@ -1,0 +1,41 @@
+---
+- name: installing tomcat server
+  hosts: Redhat
+  become: true
+  gather_facts: yes
+  tasks:
+  - name: installing java
+    yum:
+      name: java
+      state: installed
+   
+  - name: Download tomcat tar file
+    ansible.builtin.get_url:
+      url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.48/bin/apache-tomcat-10.1.48.tar.gz
+      dest: /opt   
+      mode: '0775'
+      
+  - name: Unpack tomcat tar.gz file
+    ansible.builtin.unarchive:
+      src: /opt/apache-tomcat-10.1.48.tar.gz
+      dest: /opt
+      remote_src: yes
+      
+  - name: linking file to startup
+    ansible.builtin.file:
+      src: /opt/apache-tomcat-10.1.48/bin/startup.sh
+      dest: /usr/bin/tomcatup
+      state: link
+      
+      
+  - name: linking file to shutdown
+    ansible.builtin.file:
+      src: /opt/apache-tomcat-10.1.48/bin/shutdown.sh
+      dest: /usr/bin/tomcatdown
+      state: link
+      
+      
+  - name: Use 'argv' to tomcatup commnad
+    ansible.builtin.command: nohup ./startup.sh
+    args:
+      chdir: /opt/apache-tomcat-10.1.48/bin/

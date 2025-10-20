@@ -1,0 +1,22 @@
+---
+- name: creating user and directory
+  hosts: all
+  become: true
+  gather_facts: no
+  #vars:
+  #  user_name: Sagar
+  vars_files:
+    /home/ansadmin/playboks/user.yml
+    
+  tasks:
+  - name: create user into remote servers
+    user:
+      name: "{{ user_name }}"
+            
+  - name: create directory
+    file:
+      path: /opt/{{ user_name }}_temp_dir
+      state: directory
+      owner: "{{ user_name }}"
+      group: "{{ user_name }}"
+      mode: 0755
