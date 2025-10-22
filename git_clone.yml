@@ -1,0 +1,14 @@
+---
+- name: clone git repo and using vault
+  hosts: Redhat
+  become: true
+  gather_facts: no
+  vars_files:
+    /home/ansadmin/playboks/credential.yml
+  
+  tasks:
+  - name: Clone private repo via HTTPS with token
+    ansible.builtin.git:
+      repo: https://{{ username }}:{{ token }}@github.com/sag-ar/vault_test.git
+      dest: /home/ansadmin/vaulttest
+      version: main      
