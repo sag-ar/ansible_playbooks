@@ -20,22 +20,25 @@
       src: /opt/apache-tomcat-10.1.48.tar.gz
       dest: /opt
       remote_src: yes
+
+  - name: change permission of files
+    file:
+      path: /opt/apache-tomcat-10.1.48/
+      mode: '0755'
+      owner: ansadmin
+      group: ansadmin
+      recurse: yes
       
   - name: linking file to startup
     ansible.builtin.file:
-      src: /opt/apache-tomcat-10.1.48/bin/startup.sh
-      dest: /usr/bin/tomcatup
+      src: /opt/apache-tomcat-10.1.48/bin/{{item.tomcat_script}}
+      dest: /usr/local/bin/{{item.command}}
       state: link
-      
-      
-  - name: linking file to shutdown
-    ansible.builtin.file:
-      src: /opt/apache-tomcat-10.1.48/bin/shutdown.sh
-      dest: /usr/bin/tomcatdown
-      state: link
-      
-      
-  - name: Use 'argv' to tomcatup commnad
-    ansible.builtin.command: nohup ./startup.sh
-    args:
-      chdir: /opt/apache-tomcat-10.1.48/bin/
+    loop:
+      - { tomcat_script: startup.sh, command: tomcatup }
+      - { tomcat_script: shutdown.sh, command: tomcatdown }
+    notify: start tomcat 
+   
+  handlers:       
+  - name: start tomcat
+    ansible.builtin.shell: nohup /usr/local/bin/tomcatup  
